@@ -1,0 +1,10 @@
+#!/bin/bash -l
+#PBS -l nodes=1:ppn=24,mem=62gb,walltime=1:00:00
+#PBS -M showa028@umn.edu
+#PBS -e Bpseu_DUL_qc_ntblast.e
+#PBS -o Bpseu_DUL_qc_ntblast.o
+#PBS -N Bpseu_DUL_qc_ntblast
+#PBS -m abe
+#running nt blast on sorted scaffolds
+module load ncbi_blast+/2.7.1.CentOS7
+blastn -db nt -query ~/Bpseu_DUL/Genome_QC/scaffolds_sort.fasta -outfmt '6 qseqid qlen length evalue qstart qend pident gaps sseqid slen sskingdoms sscinames staxids'  -evalue 0.00001 -out ~/Bpseu_DUL/Genome_QC/ntblast_out.txt -num_threads 24 -perc_identity 10 -max_target_seqs 10

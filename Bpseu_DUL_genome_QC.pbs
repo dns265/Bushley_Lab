@@ -1,0 +1,18 @@
+#!/bin/bash -l
+#PBS -l nodes=1:ppn=24,mem=62gb,walltime=6:00:00
+#PBS -M showa028@umn.edu
+#PBS -e Bpseu_DUL_genome_qc.e
+#PBS -o Bpseu_DUL_genome_qc.o
+#PBS -N Bpseu_DUL_genome_qc
+#PBS -m abe
+cd ~/Bpseu_DUL/Genome_QC/
+#sorting contigs by length and renaming with simple fasta headers
+module load funannotate/1.5.0
+funannotate sort -i ~/Bpseu_DUL/SPAdes/spades_out_k99_ec_crfl_avq/scaffolds.fasta -o ~/Bpseu_DUL/Genome_QC/scaffolds_sort.fasta
+funannotate clean -i ~/Bpseu_DUL/Genome_QC/scaffolds_sort.fasta -o ~/Bpseu_DUL/Genome_QC/scaffolds_sort_clean.fasta -p 99 -c 99
+#running read mapping with bbmap
+module load samtools
+~/bbmap/reformat.sh in=~/Bpseu_DUL/fastqc_avq/Bpseu_DUL_pairs.fastq out1=~/Bpseu_DUL/fastqc_avq/Bpseu_DUL_R1.fastq out2=~/Bpseu_DUL/fastqc_avq/Bpseu_DUL_R2.fastq
+~/bbmap/bbwrap.sh in1=~/Bpseu_DUL/fastqc_avq/Bpseu_DUL_R1.fastq,/home/bushleyk/showa028/Bpseu_DUL/fastqc_avq/Bpseu_DUL_singles.fastq in2=~/Bpseu_DUL/fastqc_avq/Bpseu_DUL_R2.fastq,null ref=~/Bpseu_DUL/Genome_QC/scaffolds_sort.fasta out=~/Bpseu_DUL/Genome_QC/mapped.sam append
+#running pileup to get coverage stats at the scaffold level
+~/bbmap/pileup.sh in=~/Bpseu_DUL/Genome_QC/mapped.sam ref=~/Bpseu_DUL/Genome_QC/scaffolds_sort.fasta out=covstats.txt stdev=t hist=covhist.txt
