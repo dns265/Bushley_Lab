@@ -1,0 +1,8 @@
+#!/bin/bash -l
+#PBS -l nodes=1:ppn=32,walltime=4:00:00,mem=998gb
+#PBS -N canu_correct
+#PBS -m abe
+
+cd /home/bushleyk/showa028/Bb_GHA/PacBio_GHA/1_A01/
+
+/home/bushleyk/showa028/canu-1.8/Linux-amd64/bin/canu -correct -p GHA ovsConcurrency=12 redMemory=60 -oeaMemory=60 useGrid=false genomeSize=35m -pacbio-raw ./GHA_PB.fastq.gz

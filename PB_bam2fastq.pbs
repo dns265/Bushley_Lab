@@ -1,0 +1,10 @@
+#!/bin/bash -l
+#PBS -l walltime=2:00:00,nodes=1:ppn=24,mem=62gb
+#PBS -m ae
+
+module load umgc
+module load smrtlink
+
+cd /home/bushleyk/showa028/Bb_GHA/PacBio_GHA/1_A01/
+
+bam2fastq -o GHA_PB m54248_180827_144908.subreads.bam
