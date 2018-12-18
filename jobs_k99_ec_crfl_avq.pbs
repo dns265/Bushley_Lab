@@ -1,0 +1,11 @@
+#!/bin/bash -l
+#PBS -l nodes=1:ppn=24,pmem=10580mb,walltime=8:00:00
+#PBS -M showa028@umn.edu
+#PBS -N Bpseu_DUL_k99
+#PBS -m abe
+#PBS -q ram256g
+
+# SPAdes
+module load spades
+# error correction and assembly
+spades.py -k 21,33,55,77,99 --careful --pe1-12 /panfs/roc/groups/11/bushleyk/showa028/Bpseu_DUL/fastqc_avq/Bpseu_DUL_pairs.fastq --pe1-s /panfs/roc/groups/11/bushleyk/showa028/Bpseu_DUL/fastqc_avq/Bpseu_DUL_singles.fastq -t 24 -m 252 -o /panfs/roc/groups/11/bushleyk/showa028/Bpseu_DUL/SPAdes/spades_out_k99_ec_crfl_avq
